@@ -3,21 +3,28 @@ package org.tests;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 public class DummyTest {
 
     private WebDriver driver;
     private RegisterPageSteps steps;
+        
+    @Rule
+    public TestName testName = new TestName();
     
     @Before
     public void runDriver() throws IOException {
-        driver = DriverFactory.getDriver();
+        driver = DriverFactory.getDriver(testName.getMethodName());
         steps = new RegisterPageSteps(driver);
     }
     
-    @Test
+    //@Test
     public void testRegisterPage() {        
         steps.openRegisterPage();
         steps.ensureRegisterPage();        
@@ -32,7 +39,7 @@ public class DummyTest {
         steps.ensureErrorMessage("Please enter a valid email address.");
     }
     
-    @Test
+    //@Test
     public void testPasswordMismatch() {        
         steps.openRegisterPage();
         steps.ensureRegisterPage();
