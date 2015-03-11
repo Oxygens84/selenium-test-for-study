@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
+//import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -44,12 +44,12 @@ public class DriverFactory {
                 return new InternetExplorerDriver();         
             case "Chrome":                 
                 return new ChromeDriver();
-            case "PhantomJS": 
-                return new PhantomJSDriver(new DesiredCapabilities());
+            //case "PhantomJS": 
+            //    return new PhantomJSDriver(new DesiredCapabilities());
             case "remote": 
                 return new RemoteWebDriver(null);  
             default:
-                return new FirefoxDriver();
+                throw new RuntimeException("Invalid driver: " + driver);
         } 
     }
 
@@ -66,9 +66,9 @@ public class DriverFactory {
             case "Chrome":                 
                 capabilities = DesiredCapabilities.chrome();
                 break;
-            case "PhantomJS": 
-                capabilities = DesiredCapabilities.phantomjs(); 
-                break;
+            //case "PhantomJS": 
+            //    capabilities = DesiredCapabilities.phantomjs(); 
+            //    break;
             default:
                 throw new RuntimeException("Invalid driver: " + driver);
         } 
