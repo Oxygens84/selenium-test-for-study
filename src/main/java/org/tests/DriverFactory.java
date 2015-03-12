@@ -13,19 +13,19 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class DriverFactory {
-    
+
     public static WebDriver getDriver(String testName) throws IOException {
-        mixInPropertyFile();  
-        String environment = System.getProperty("environment");        
+        mixInPropertyFile();
+        String environment = System.getProperty("environment");
         switch(environment) {
-            case "local": 
+            case "local":
                 return localDriver();
-            case "saucelab":                 
-                return saucelabDriver(testName);  
+            case "saucelab":
+                return saucelabDriver(testName);
             default:
                 throw new RuntimeException("Invalid environment: " + environment);
-        }  
-    }   
+        }
+    }
 
     private static void mixInPropertyFile() throws IOException {
         PropertyReader reader = new PropertyReader();
@@ -38,49 +38,49 @@ public class DriverFactory {
     private static WebDriver localDriver() {
         String driver = System.getProperty("driver");
         switch(driver) {
-            case "FireFox": 
+            case "FireFox":
                 return new FirefoxDriver();
-            case "IE":                 
-                return new InternetExplorerDriver();         
-            case "Chrome":                 
+            case "IE":
+                return new InternetExplorerDriver();
+            case "Chrome":
                 return new ChromeDriver();
-            //case "PhantomJS": 
+            //case "PhantomJS":
             //    return new PhantomJSDriver(new DesiredCapabilities());
-            case "remote": 
-                return new RemoteWebDriver(null);  
+            case "remote":
+                return new RemoteWebDriver(null);
             default:
                 throw new RuntimeException("Invalid driver: " + driver);
-        } 
+        }
     }
 
     private static WebDriver saucelabDriver(String testName) throws MalformedURLException {
         String driver = System.getProperty("driver");
         DesiredCapabilities capabilities;
         switch(driver) {
-            case "FireFox": 
+            case "FireFox":
                 capabilities = DesiredCapabilities.firefox();
                 break;
-            case "IE":                 
+            case "IE":
                 capabilities = DesiredCapabilities.internetExplorer();
                 break;
-            case "Chrome":                 
+            case "Chrome":
                 capabilities = DesiredCapabilities.chrome();
                 break;
-            //case "PhantomJS": 
-            //    capabilities = DesiredCapabilities.phantomjs(); 
+            //case "PhantomJS":
+            //    capabilities = DesiredCapabilities.phantomjs();
             //    break;
             default:
                 throw new RuntimeException("Invalid driver: " + driver);
-        } 
+        }
         capabilities.setCapability("name", testName);
         String userName = System.getProperty("saucelab.user");
         String userPassword = System.getProperty("saucelab.password");
         String url = System.getProperty("saucelab.url");
         url = url.replace("{{saucelab.user}}", userName);
         url = url.replace("{{saucelab.password}}", userPassword);
-        return new RemoteWebDriver(                
+        return new RemoteWebDriver(
                 new URL(url),
                 capabilities);
     }
-    
+
 }

@@ -4,11 +4,12 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
-import org.openqa.selenium.By;
 
 public class MainPageSteps {
     
@@ -17,34 +18,55 @@ public class MainPageSteps {
 
     public MainPageSteps(WebDriver driver) {
         this.driver = driver;
-        this.page = PageFactory.initElements(driver, MainPage.class);
+        this.page = new MainPage();
+        AjaxElementLocatorFactory ajaxElementLocatorFactory = new AjaxElementLocatorFactory(driver,10);
+        PageFactory.initElements(ajaxElementLocatorFactory, this.page);
     }
     
     public void openMainPage() {
-        driver.navigate().to(MainPage.URL);
         driver.manage().window().maximize();
+        driver.navigate().to(MainPage.URL);
     }
 
     public void checkMainPageTitle() {
-        Assert.assertEquals("Telerik Web Mail Demo - Inbox", driver.getTitle());
+        Assert.assertEquals(page.PAGE_TITLE, driver.getTitle());
     }
 
     public void openInboxFolders() {
         List<WebElement> inboxFolders = page.getInboxFolders();
         for (WebElement inboxFolder : inboxFolders) {
-            System.out.println("folderName = " + inboxFolder.getText());
-            inboxFolder.click();
-            waitUntilListRefresh();
-            //Assert.assertTrue(driver.findElement(By.linkText("From")).isEnabled());
+            clickFolder(inboxFolder);
+            webDriverWaitUntil(elementToBeClickable(page.getMailListGrid()));
         }
     }
 
-    private void waitUntilListRefresh() {
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.visibilityOfElementLocated(page.getLoadIndicator()));
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.invisibilityOfElementLocated(page.getLoadIndicator()));
+//    public void openInboxFolders() {
+//        List<WebElement> inboxFolders = page.getInboxFolders();
+//        for (WebElement inboxFolder : inboxFolders) {
+//            System.out.println("folderName = " + inboxFolder.getText());
+//            inboxFolder.click();
+//            waitUntilListRefresh();
+//        }
+//    }
+
+    private void clickFolder(final WebElement inboxFolder) {
+        System.out.println("Processing folder = " + inboxFolder.getText());
+        Utils.tryAttempts(3, new Runnable() {
+            @Override
+            public void run() {
+                inboxFolder.click();
+                waitUntilListRefresh();
+            }
+        });
     }
 
+    private void waitUntilListRefresh() {
+        webDriverWaitUntil(visibilityOfElementLocated(page.getLoadIndicator()));
+        webDriverWaitUntil(invisibilityOfElementLocated(page.getLoadIndicator()));
+    }
+
+    private void webDriverWaitUntil(ExpectedCondition condition) {
+        (new WebDriverWait(driver, 10, 100)).until(condition);
+    }
 
 }
