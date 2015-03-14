@@ -1,4 +1,4 @@
-package org.tests;
+package org.tests.webmail;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

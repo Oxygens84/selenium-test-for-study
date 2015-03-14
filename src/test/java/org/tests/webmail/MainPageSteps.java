@@ -1,4 +1,4 @@
-package org.tests;
+package org.tests.webmail;
 
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +8,7 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.tests.Utils;
 
 import java.util.List;
 
