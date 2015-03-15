@@ -30,7 +30,7 @@ public class MainPageSteps {
     }
 
     public void checkMainPageTitle() {
-        Assert.assertEquals(page.PAGE_TITLE, driver.getTitle());
+        Assert.assertEquals(MainPage.PAGE_TITLE, driver.getTitle());
     }
 
     public void openInboxFolders() {

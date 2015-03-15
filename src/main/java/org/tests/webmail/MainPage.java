@@ -19,7 +19,13 @@ public class MainPage {
     @FindBy(css = "#ctl00_ContentPlaceHolder2_RadGrid1_ctl00")
     private WebElement mailListGrid;
 
-    private By loadIndicator = By.cssSelector(".RadAjax");
+    private final By loadIndicator = By.cssSelector(".RadAjax");
+
+//    @FindBys({
+//            @FindBy(xpath = "//ul[@class='rtUL']"),
+//            @FindBy(xpath = "span[@class='rtIn']")
+//    })
+//    List<WebElement> inboxFolders;
 
 
     public List<WebElement> getInboxFolders() {
